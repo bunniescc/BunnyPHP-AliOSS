@@ -1,0 +1,21 @@
+{
+  "name": "ivanlulyf/bunnyphp-alioss",
+  "description": "Aliyun OSS Storage for BunnyPHP",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ivan Lu",
+      "email": "me@ivanlu.cn"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Bunny\\Storage\\": "storage/"
+    }
+  },
+  "require": {
+    "ivanlulyf/bunnyphp": "^2.3",
+    "aliyuncs/oss-sdk-php": "^2.3"
+  }
+}
