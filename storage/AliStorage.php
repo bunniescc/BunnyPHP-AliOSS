@@ -9,6 +9,7 @@
 namespace Bunny\Storage;
 
 use BunnyPHP\Storage;
+use BunnyPHP\View;
 use OSS\Core\OssException;
 use OSS\OssClient;
 
@@ -32,7 +33,7 @@ class AliStorage implements Storage
         try {
             $this->ossClient = new OssClient($this->accessKeyId, $this->accessKeySecret, $this->endpoint);
         } catch (OssException $e) {
-            exit($e->getMessage());
+            View::error(['tp_error_msg' => $e->getMessage()]);
         }
     }
 
@@ -45,6 +46,7 @@ class AliStorage implements Storage
     public function write($filename, $content)
     {
         $this->ossClient->putObject($this->bucket, $filename, $content);
+        return $this->url . $filename;
     }
 
     public function upload($filename, $path)
@@ -53,7 +55,8 @@ class AliStorage implements Storage
             $this->ossClient->uploadFile($this->bucket, $filename, $path);
             return $this->url . $filename;
         } catch (OssException $e) {
-            exit($e->getMessage());
+            View::error(['tp_error_msg' => $e->getMessage()]);
+            return false;
         }
     }
 
@@ -63,5 +66,6 @@ class AliStorage implements Storage
             $filename = substr($filename, strlen($this->url));
         }
         $this->ossClient->deleteObject($this->bucket, $filename);
+        return true;
     }
 }
