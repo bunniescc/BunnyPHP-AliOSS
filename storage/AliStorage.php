@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: IvanLu
- * Date: 2018/8/4
- * Time: 22:12
- */
 
 namespace Bunny\Storage;
 
@@ -13,9 +7,15 @@ use BunnyPHP\View;
 use OSS\Core\OssException;
 use OSS\OssClient;
 
+/**
+ * Class AliStorage
+ * @package Bunny\Storage
+ * @author IvanLu
+ * @time 2018/8/4 22:12
+ */
 class AliStorage implements Storage
 {
-    protected $ossClient;
+    protected OssClient $ossClient;
     protected $accessKeyId;
     protected $accessKeySecret;
     protected $endpoint;
@@ -39,17 +39,16 @@ class AliStorage implements Storage
 
     public function read($filename)
     {
-        $content = $this->ossClient->getObject($this->bucket, $filename);
-        return $content;
+        return $this->ossClient->getObject($this->bucket, $filename);
     }
 
-    public function write($filename, $content)
+    public function write($filename, $content): string
     {
         $this->ossClient->putObject($this->bucket, $filename, $content);
         return $this->url . $filename;
     }
 
-    public function upload($filename, $path)
+    public function upload(string $filename, string $path): string
     {
         try {
             $this->ossClient->uploadFile($this->bucket, $filename, $path);
@@ -60,7 +59,7 @@ class AliStorage implements Storage
         }
     }
 
-    public function remove($filename)
+    public function remove($filename): bool
     {
         if (strpos($filename, $this->url) === 0) {
             $filename = substr($filename, strlen($this->url));
